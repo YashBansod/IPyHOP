@@ -1,4 +1,21 @@
 # IPyHOP
+
+Described in the Paper: [HTN Replanning from the Middle](https://journals.flvc.org/FLAIRS/article/download/130732/133891)
+
+---
+  
+**If you use this repository please cite our work:**  
+
+```bibtex
+@inproceedings{bansod2022htn,
+  title={HTN Replanning from the Middle},
+  author={Bansod, Yash and Patra, Sunandita and Nau, Dana and Roberts, Mark},
+  booktitle={The International FLAIRS Conference Proceedings},
+  volume={35},
+  year={2022}
+}
+```
+
 Re-entrant Iterative PyHOP (Python Hierarchical Ordered Planner) written in Python 3.
 
 IPyHOP uses HTN methods to decompose tasks into smaller and smaller subtasks, until it finds tasks that
@@ -67,10 +84,10 @@ For examples of how to use it, see the example files that come with IPyHOP.
 
 IPyHOP provides the following classes and functions:
 
-*   `state = State('foo')` tells IPyHOP to create an empty state object named 'foo'.  
+* `state = State('foo')` tells IPyHOP to create an empty state object named 'foo'.  
     To put variables and values into it, you should do assignments such as `foo.var1 = val1`
 
-*   `methods = Methods()` tells IPyHOP to create an empty methods container.  
+* `methods = Methods()` tells IPyHOP to create an empty methods container.  
         To add tasks and associated task methods into it, you should use
         `methods.declare_task_methods(task_name, method_list)`.  
         To add tasks and associated goal methods into it, you should use
@@ -78,29 +95,11 @@ IPyHOP provides the following classes and functions:
         To add tasks and associated multigoal methods into it, you should use
         `methods.declare_multigoal_methods(goal_tag, method_list)`.  
         
-*   `actions = Actions()` tells IPyHOP to create an empty actions container.  
+* `actions = Actions()` tells IPyHOP to create an empty actions container.  
     To add actions into it, you should use `actions.declare_actions(action_list)`.  
     `declare_actions([a1, a2, ..., ak])` tells IPyHOP that a1, a2, ..., ak are all of the planning actions.
     This supersedes any previous call to `declare_actions([a1, a2, ..., ak])`.
 
-*   `planner = IPyHOP(methods, actions)` tells IPyHOP to create a IPyHOP planner object.  
+* `planner = IPyHOP(methods, actions)` tells IPyHOP to create a IPyHOP planner object.  
     To plan using the planner, you should use `planner.plan(state, task_list)`.
 
-*   `planar_plot(graph, root_node=0)` tells IPyHOP to create a planar plot of the graph.  
-    This can be used to visualize the solution planning graph.  
-    Solution planning graph can be accessed using `planner.sol_tree`.  
-
-*   `post_failure_tasks(graph, fail_node)` tells IPyHOP to compute the modified task list given that
-    an unexpected failure occurred during actual execution of `fail_node` from the original planned graph.  
-    
-## Other Project Details
-**Author:**   
-Yash Bansod - https://yashbansod.github.io/  
-
-**Derived From:**  
-GTPyhop  
-Author: Dana S. Nau, July 22, 2021  
-Copyright (c) 2021, University of Maryland  
-
-## License
-**BSD 3-Clause License**
