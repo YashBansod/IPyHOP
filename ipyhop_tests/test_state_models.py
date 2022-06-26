@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-File Description: Test state models
+File Description: Test state models. This dummy statesample_test_3.py definition is used for various tests of IPyHOP.
 """
 
 # ******************************************    Libraries to be imported    ****************************************** #

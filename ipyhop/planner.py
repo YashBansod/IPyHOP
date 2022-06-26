@@ -74,7 +74,7 @@ class IPyHOP(object):
         :param actions: [Optional] An instance of Actions class containing the collection of actions in the
             planning domain.
         :param verbose: [Optional] An integer specifying the level of verbosity for IPyHOP.
-        :return:
+        :return: A list containing the solution plan.
         """
         self.state = state.copy()
         self.task_list = deepcopy(task_list)
@@ -279,15 +279,28 @@ class IPyHOP(object):
         return _iter
 
     # ******************************        Class Method Declaration        ****************************************** #
-    def replan(self, state: State, fail_node, verbose: Optional[int] = 0) -> _p_type:
+    def replan(self, state: State, fail_node_id: int, verbose: Optional[int] = 0) -> _p_type:
+        """
+        IPyHOP.replan(state_1, fail_node_id) tells IPyHOP to re-plan the solution tree given that the node with id
+        *fail_node_id* has failed. The planning should be accomplished from a new initial state *state_1*,
+        using whatever methods and actions IPyHOP was constructed
+
+        Additionally, you can add an optional argument called 'verbose' that tells IPyHOP how much debugging printout
+        it should provide:
+            * if verbose = 0 (the default), IPyHOP returns the solution but prints nothing;
+            * if verbose = 1, it prints the initial parameters and the answer;
+            * if verbose = 2, it also prints a message on each iteration;
+            * if verbose = 3, it also prints info about what it's computing.
+
+        :param state: An instance of State class containing the collection of variable bindings representing
+            the current/initial state in the planning problem.
+        :param fail_node_id: The id of the failure node.
+        :param verbose: [Optional] An integer specifying the level of verbosity for IPyHOP.
+        :return: A list containing the solution plan.
+        """
 
         self.state = state.copy()
-        fail_node_id = -1
-        for node in self.sol_tree.nodes:
-            if self.sol_tree.nodes[node]['info'] == fail_node:
-                fail_node_id = node
 
-        assert (fail_node_id > -1), "Couldn't find the failure node."
         max_id = self._post_failure_modify(fail_node_id)
         parent_node_id, curr_node_id = self._backtrack(list(self.sol_tree.predecessors(fail_node_id))[0], fail_node_id)
 
@@ -298,7 +311,7 @@ class IPyHOP(object):
         # Store the planning solution as a list of actions to be executed.
         for node_id in dfs_preorder_nodes(self.sol_tree, source=0):
             if self.sol_tree.nodes[node_id]['type'] == 'A':
-                if node_id >= max_id:
+                if self.sol_tree.nodes[node_id]['tag'] == 'new':
                     self.sol_plan.append(self.sol_tree.nodes[node_id]['info'])
 
         return self.sol_plan
@@ -311,32 +324,32 @@ class IPyHOP(object):
                 relevant_methods = self.methods.multigoal_method_dict[child_node_info.goal_tag]
                 self.sol_tree.add_node(_id, info=child_node_info, type='M', status='O', state=None,
                                        selected_method=None, available_methods=iter(relevant_methods),
-                                       methods=relevant_methods)
+                                       methods=relevant_methods, tag='new')
                 self.sol_tree.add_edge(parent_node_id, _id)
             elif child_node_info[0] in self.methods.task_method_dict:
                 relevant_methods = self.methods.task_method_dict[child_node_info[0]]
                 self.sol_tree.add_node(_id, info=child_node_info, type='T', status='O', state=None,
                                        selected_method=None, available_methods=iter(relevant_methods),
-                                       methods=relevant_methods)
+                                       methods=relevant_methods, tag='new')
                 self.sol_tree.add_edge(parent_node_id, _id)
             elif child_node_info[0] in self.actions.action_dict:
                 action = self.actions.action_dict[child_node_info[0]]
-                self.sol_tree.add_node(_id, info=child_node_info, type='A', status='O', action=action)
+                self.sol_tree.add_node(_id, info=child_node_info, type='A', status='O', action=action, tag='new')
                 self.sol_tree.add_edge(parent_node_id, _id)
             elif child_node_info[0] in self.methods.goal_method_dict:
                 relevant_methods = self.methods.goal_method_dict[child_node_info[0]]
                 self.sol_tree.add_node(_id, info=child_node_info, type='G', status='O', state=None,
                                        selected_method=None, available_methods=iter(relevant_methods),
-                                       methods=relevant_methods)
+                                       methods=relevant_methods, tag='new')
                 self.sol_tree.add_edge(parent_node_id, _id)
 
         if self.sol_tree.nodes[parent_node_id]['type'] == 'G':
             _id += 1
-            self.sol_tree.add_node(_id, info='VerifyGoal', type='VG', status='O')
+            self.sol_tree.add_node(_id, info='VerifyGoal', type='VG', status='O', tag='new')
             self.sol_tree.add_edge(parent_node_id, _id)
         elif self.sol_tree.nodes[parent_node_id]['type'] == 'M':
             _id += 1
-            self.sol_tree.add_node(_id, info='VerifyMultiGoal', type='VM', status='O')
+            self.sol_tree.add_node(_id, info='VerifyMultiGoal', type='VM', status='O', tag='new')
             self.sol_tree.add_edge(parent_node_id, _id)
 
         return _id
@@ -371,6 +384,8 @@ class IPyHOP(object):
                     self.sol_tree.nodes[node_id]['state'] = self.state.copy()
                 else:
                     self.sol_tree.nodes[node_id]['state'] = None
+            if self.sol_tree.nodes[node_id]['status'] == 'C':
+                self.sol_tree.nodes[node_id]['tag'] = 'old'
 
         return max_id
 

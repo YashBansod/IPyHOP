@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-File Description: Test action models
+File Description: Test action models. This dummy action definition is used for various tests of IPyHOP.
 """
 
 # ******************************************    Libraries to be imported    ****************************************** #

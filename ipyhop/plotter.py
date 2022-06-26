@@ -39,7 +39,7 @@ def planar_plot(graph: DiGraph, root_node: int = 0):
         elif graph.nodes[node]['type'] == 'G':
             n_col.append('orange')
             n_sz.append(100)
-        elif graph.nodes[node]['type'] == 'MG':
+        elif graph.nodes[node]['type'] == 'M':
             n_col.append('chocolate')
             n_sz.append(100)
         elif graph.nodes[node]['type'] == 'A':

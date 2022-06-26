@@ -71,7 +71,7 @@ def main():
 
     plan = planner.plan(init_state, [('put_it',), ('need0',)], verbose=3)
     assert plan == exp_0, "Result plan and expected plan are not same"
-    print("Above, seek_plan backtracks once to use a different method for 'put_it'.\n")
+    print("Above, the planner backtracks once to use a different method for 'put_it'.\n")
 
     plan = planner.plan(init_state, [('put_it',), ('need01',)], verbose=3)
     assert plan == exp_0, "Result plan and expected plan are not same"
@@ -79,12 +79,12 @@ def main():
 
     plan = planner.plan(init_state, [('put_it',), ('need10',)], verbose=3)
     assert plan == exp_0, "Result plan and expected plan are not same"
-    print("Above, seek_plan backtracks to use a different method for 'put_it', \n"
+    print("Above, the planner backtracks to use a different method for 'put_it', \n"
           "and later it backtracks to use a different method for 'need10'.\n")
 
     plan = planner.plan(init_state, [('put_it',), ('need1',)], verbose=3)
     assert plan == exp_1, "Result plan and expected plan are not same"
-    print("First, seek_plan backtracks to use a different method for 'put_it'. \n"
+    print("First, the planner backtracks to use a different method for 'put_it'. \n"
           "But the solution it finds for 'put_it' doesn't satisfy the preconditions of the \n"
           "method for 'need1', making it backtrack to use a third method for 'put_it'.\n")
 

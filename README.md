@@ -1,6 +1,4 @@
-# IPyHOP
-
-Described in the Paper: [HTN Replanning from the Middle](https://journals.flvc.org/FLAIRS/article/download/130732/133891)
+# [IPyHOP](https://github.com/YashBansod/IPyHOP/)
 
 ---
   
@@ -16,72 +14,16 @@ Described in the Paper: [HTN Replanning from the Middle](https://journals.flvc.o
 }
 ```
 
-Re-entrant Iterative PyHOP (Python Hierarchical Ordered Planner) written in Python 3.
+[IPyHOP](https://github.com/YashBansod/IPyHOP/) is a Re-entrant Iterative [GTPyHOP](https://github.com/dananau/GTPyhop) written in Python 3. [PyHOP](https://bitbucket.org/dananau/pyhop/src/master/) is an acronym for Python Hierarchical Ordered Planner.  
+  
+IPyHOP is a _Totally-Ordered Goal Task Network (GTN) Planner_ written in Python 3. It effectively plans like a re-entrant iterative version of GTPyHOP. However, IPyHOP produces a _solution tree_ (a task decomposition network) to accomplish a to-do list _T_ consisting of actions, tasks, and goals. The _solution tree_ preserves the hierarchy of the decompositions performed to obtain the _solution plan_. The _solution plan_ can be obtained by listing the actions in the _solution tree_ in a pre-ordered depth-first search manner. The plan presents the sequence of actions that accomplishes all of the items in _T_, in the order that they occur in _T_.  
+  
+IPyHOP can also re-enter any point in the task decomposition network and re-plan from there. Alternatively, it can be fed a partially solved task decomposition network to solve the planning problem.  
+  
+For more details on IPyHOP's planning algorithm please read the paper: [HTN Replanning from the Middle](https://journals.flvc.org/FLAIRS/article/download/130732/133891)  
 
-IPyHOP uses HTN methods to decompose tasks into smaller and smaller subtasks, until it finds tasks that
-correspond directly to actions. Some special features of IPyHOP are:
-
-(1) In IPyHOP, one writes methods and actions as ordinary Python functions.  
-(2) Instead of representing states as collections of logical assertions, IPyHOP uses state-variable representation:
-    a state is a Python object that contains variable bindings.  
-    
-## Project Setup Instructions
-- **Setup a virtual interpreter (optional)**  
-
-```shell script
- python -m venv venv
-```
-- **Activate the virtual interpreter (if setup)**  
-
-Ubuntu:  
-```shell script
-./venv/bin/activate
-```
-Windows:  
-```shell script
-./venv/Scripts/activate
-```
-- **Install project requirements**  
-
-```shell script
-pip install -r requirements.txt
-```
-
-## Run Instructions
-- **Run an "example" file from the provided examples**  
-
-To run any python file in the project  
-Windows:  
-```shell script
-set PYTHONPATH=<path to project directory>
-python <path to python file>
-```
-example:
-```shell script
-set PYTHONPATH=D:\GitHub\IPyHOP
-python .\examples\robosub\robosub_example.py
-```
-Linux:  
-```shell script
-PYTHONPATH=<path to project directory> python <path to python file>
-```
-example:
-```shell script
-PYTHONPATH=/home/user/GitHub/IPyHOP python ./examples/robosub/robosub_example.py
-```
-*Note: The **PYTHONPATH** needs to be set up only once for your environment.*  
-
-    
-## TODO List:
-*   Create a pip installable python package of IPyHOP.  
-This would require writing the *setup.py* file and making the *.whl* (wheel) packages.
-Follow the steps mentioned in the following link: https://packaging.python.org/tutorials/packaging-projects/ 
-    
-## Overview:
-
-IPyHOP should work correctly in Python 3.5+.  
 For examples of how to use it, see the example files that come with IPyHOP.
-
+  
 IPyHOP provides the following classes and functions:
 
 * `state = State('foo')` tells IPyHOP to create an empty state object named 'foo'.  
@@ -97,9 +39,23 @@ IPyHOP provides the following classes and functions:
         
 * `actions = Actions()` tells IPyHOP to create an empty actions container.  
     To add actions into it, you should use `actions.declare_actions(action_list)`.  
-    `declare_actions([a1, a2, ..., ak])` tells IPyHOP that a1, a2, ..., ak are all of the planning actions.
+    `declare_actions([a1, a2, ..., ak])` tells IPyHOP that a1, a2, ..., ak are all of the planning actions.  
     This supersedes any previous call to `declare_actions([a1, a2, ..., ak])`.
 
 * `planner = IPyHOP(methods, actions)` tells IPyHOP to create a IPyHOP planner object.  
-    To plan using the planner, you should use `planner.plan(state, task_list)`.
+    To plan using the planner, you should use `planner.plan(state, task_list)`.  
+  
+* `planner.replan(state, fail_node_id)` can be used to re-plan from a failure node in the planner's solution tree.  
+    `fail_node_id` is the id of the node in the solution tree that failed.  
+    Let `fail_node` describe the action, task, or goal that caused the failure. Ex. ('move', 'a', 'b').  
+    Then, to mark `fail_node` as a deterministic failure, you should blacklist it using `planner.blacklist_command(fail_node)`.  
+  
+* `planar_plot(planner.sol_tree)` can be used to visualize the solution tree graphically.  
+  
+* `planner.simulate(state)` can be used to deterministically simulate the plan generated by the planner from a given initial state.   
+  
+Please see the code doc strings for detailed descriptions of IPyHOP's classes and functions.  
+  
+Please see the [IPyHOP Wiki](https://github.com/YashBansod/IPyHOP/wiki) for more project details.  
+  
 

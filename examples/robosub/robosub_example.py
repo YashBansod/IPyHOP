@@ -8,7 +8,7 @@ from __future__ import print_function
 from examples.robosub.domain.robosub_methods import methods
 from examples.robosub.domain.robosub_actions import actions
 from examples.robosub.problem.robosub_problem_1 import init_state, task_list
-from ipyhop import IPyHOP, planar_plot, post_failure_tasks
+from ipyhop import IPyHOP, planar_plot
 
 
 # ******************************************        Main Program Start      ****************************************** #
@@ -28,11 +28,6 @@ def main():
     print('Plan: ')
     for action in plan:
         print('\t', action)
-
-    fail_node = ('a_drop_garlic_closed_coffin', 'gm2', 'c1', 'l3')
-    new_task_list = post_failure_tasks(graph, fail_node)
-    print("If failure occurs at: ", fail_node)
-    print("New task list will be: ", new_task_list)
 
 
 # ******************************************        Main Program End        ****************************************** #
