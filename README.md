@@ -56,6 +56,8 @@ IPyHOP provides the following classes and functions:
   
 Please see the code doc strings for detailed descriptions of IPyHOP's classes and functions.  
   
-Please see the [IPyHOP Wiki](https://github.com/YashBansod/IPyHOP/wiki) for more project details.  
+---  
+## Please see the [IPyHOP Wiki](https://github.com/YashBansod/IPyHOP/wiki) for more project details.  
+---  
   
 
