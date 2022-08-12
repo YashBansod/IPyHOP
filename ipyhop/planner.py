@@ -18,8 +18,8 @@ from copy import deepcopy
 # ******************************************    Class Declaration Start     ****************************************** #
 class IPyHOP(object):
     """
-    IPyHOP uses HTN methods to decompose tasks into smaller and smaller subtasks, until it finds tasks that
-    correspond directly to actions.
+    IPyHOP uses GTN methods to decompose tasks/goals into smaller and smaller subtasks/subgoals, until it finds
+    tasks/goals that correspond directly to actions.
 
     *   planner = IPyHOP(methods, actions) tells IPyHOP to create a IPyHOP planner object.
         To plan using the planner, you should use planner.plan(state, task_list).
